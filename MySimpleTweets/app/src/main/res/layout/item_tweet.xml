@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="10dp" android:background="@android:color/white">
+
+    <ImageView
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:id="@+id/ivProfileImage"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/ic_launcher"
+        android:paddingTop="1dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yahoo"
+        android:id="@+id/tvUserName"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginRight="5dp"
+        android:layout_alignTop="@+id/ivProfileImage"
+        android:layout_toEndOf="@+id/ivProfileImage" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New MacBook Pro makes typing fun again"
+        android:id="@+id/tvBody"
+        android:layout_below="@+id/tvUserName"
+        android:layout_alignStart="@+id/tvUserName"
+        android:textSize="16sp"
+        android:textColor="#14171A"
+        android:layout_marginBottom="15dp"
+        android:autoLink="all"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yahoo"
+        android:id="@+id/tvName"
+        android:layout_alignTop="@+id/tvUserName"
+        android:layout_toEndOf="@+id/tvUserName"
+        android:textSize="16sp"
+        android:textColor="#657786"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="15m"
+        android:id="@+id/tvTimeStamp"
+        android:layout_above="@+id/tvBody"
+        android:layout_alignParentEnd="true"
+        android:textColor="#657786"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnRetweet"
+        android:layout_below="@+id/tvBody"
+        android:layout_alignStart="@+id/tvBody"
+        android:src="@drawable/arrow"
+        android:background="@null"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnRetweets"
+        android:src="@drawable/retweet"
+        android:background="@null"
+        android:layout_alignTop="@+id/tvRetweetsCount"
+        android:layout_toRightOf="@+id/btnRetweet"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="1dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3"
+        android:id="@+id/tvRetweetsCount"
+        android:layout_below="@+id/tvBody"
+        android:layout_toEndOf="@+id/btnRetweets"
+        android:textSize="16sp"
+        android:textColor="@color/colorLine"
+        android:layout_marginLeft="5dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnLike"
+        android:src="@drawable/like"
+        android:background="@null"
+        android:layout_alignTop="@+id/tvRetweetsCount"
+        android:layout_toRightOf="@+id/tvRetweetsCount"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="1dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3"
+        android:id="@+id/tvFavouritesCount"
+        android:layout_below="@+id/tvBody"
+        android:layout_toEndOf="@+id/btnLike"
+        android:textSize="16sp"
+        android:textColor="@color/colorLine"
+        android:layout_marginLeft="5dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_below="@+id/tvBody"
+        android:layout_toRightOf="@+id/tvFavouritesCount"
+        android:layout_marginLeft="50dp"
+        android:src="@drawable/message"
+        android:background="@null"
+        android:layout_marginTop="1dp"/>
+</RelativeLayout>
+</layout>

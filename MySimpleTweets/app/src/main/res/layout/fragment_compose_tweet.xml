@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnClose"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/close_tweet"
+        android:background="@null"
+        android:layout_margin="15dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/etTweet"
+        android:hint="What's happening?"
+        android:background="@null"
+        android:padding="15dp"
+        android:layout_marginTop="?attr/actionBarSize"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/scrollView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/one_dp_padding"
+                android:background="@color/colorLine"
+                android:layout_marginBottom="5dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="6"
+            android:layout_margin="5dp">
+
+           <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/btnUploadImage"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/upload_image"
+            android:background="@null"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/btnUploadGif"
+            android:src="@drawable/upload_gif"
+            android:background="@null"
+            android:layout_marginTop="@dimen/two_dp_padding"
+            android:layout_weight="1.25"
+            android:layout_gravity="center"/>
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/btnUploadSurvey"
+                android:src="@drawable/upload_survey"
+                android:background="@null"
+                android:layout_marginTop="@dimen/two_dp_padding"
+                android:layout_weight="1.25"
+                android:layout_gravity="center"/>
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/btnUploadLocation"
+                android:src="@drawable/upload_location"
+                android:background="@null"
+                android:layout_weight="1.25"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="140"
+                android:id="@+id/tvCount"
+                android:layout_weight="0.25"
+                android:textSize="18sp"
+                android:layout_marginTop="@dimen/standard_padding"
+                android:textColor="@color/colorLine"
+                android:gravity="right"
+                android:paddingRight="@dimen/standard_padding"/>
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="@string/tweet"
+                android:id="@+id/btnReply"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:background="@color/colorAccent" />
+
+        </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
+</layout>

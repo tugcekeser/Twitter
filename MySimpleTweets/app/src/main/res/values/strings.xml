@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SimpleTweets</string>
+    <string name="login_label">Connect to Twitter</string>
+    <string name="title_activity_timeline">Home Timeline</string>
+    <string name="settings">Settings</string>
+    <string name="copy_link">Copy link to Tweet</string>
+    <string name="mute">Mute</string>
+    <string name="block">Block</string>
+    <string name="report">Report</string>
+    <string name="home">Home</string>
+    <string name="retweet">Retweet</string>
+    <string name="likes">Likes</string>
+    <string name="reply">REPLY</string>
+    <string name="tweet">Tweet</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="action_settings">Settings</string>
+
+</resources>
