@@ -29,4 +29,12 @@ public class Client {
     public static final String GET_USER_TIMELINE = "statuses/user_timeline.json";
     public static final String SCREEN_NAME = "screen_name";
     public static final String GET_FAVORITES_LIST = "favorites/list.json";
+    public static final String SEARCH_TWEETS = "search/tweets.json";
+
+    public static final String ADD_FAVORITE = "favorites/create.json";
+    public static final String REMOVE_FAVORITE = "favorites/destroy.json";
+    public static final String GET_DIRECT_MESSAGES = "direct_messages.json";
+    public static final String SEND_MESSAGE = "direct_messages/new.json";
+    public static final String SHOW_USER = "users/show.json";
+
 }

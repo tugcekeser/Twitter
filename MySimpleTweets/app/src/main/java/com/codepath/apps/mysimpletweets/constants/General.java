@@ -12,5 +12,7 @@ public class General {
     public static final String INITIAL_NAME="@";
     public static final int TWEET_CHARACTER_COUNT=140;
     public static final String TITLE="title";
+    public static final String USER="User";
+    public static final String INTERNET_CONNECTION_ALERT="Please check your internet connection";
 
 }

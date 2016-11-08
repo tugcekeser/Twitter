@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#657786</color>
     <color name="colorAccent">#1DA1F2</color>
     <color name="colorLine">#DADADA</color>
+    <color name="linkColor">#4CB1F4</color>
+    <color name="likedButtonColor">#E0245E</color>
 </resources>

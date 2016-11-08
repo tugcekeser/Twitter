@@ -9,6 +9,7 @@
         android:targetSdkVersion="24" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -48,8 +49,21 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.ProfileActivity"
-            android:label="@string/title_activity_profile"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.FollowersActivity"
+            android:label="@string/title_activity_followers"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.FollowingActivity"
+            android:label="@string/title_activity_following"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.SearchTweetActivity"
+            android:label="@string/title_activity_search_tweet"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.NewMessageActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

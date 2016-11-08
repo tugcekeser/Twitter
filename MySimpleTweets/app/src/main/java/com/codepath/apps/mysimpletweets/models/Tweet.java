@@ -2,6 +2,8 @@ package com.codepath.apps.mysimpletweets.models;
 
 import android.text.format.DateUtils;
 
+import com.codepath.apps.mysimpletweets.utils.Helper;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +29,7 @@ public class Tweet {
     private int favouritesCount=0;
     private String timeStamp;
     private String mediaURL;
-    private String twitterURL;
+    private boolean favorited=false;
 
     public Tweet() {
     }
@@ -64,9 +66,9 @@ public class Tweet {
         return mediaURL;
     }
 
-    public String getTwitterURL() {
-        return twitterURL;
-    }
+   public boolean getFavorited(){
+       return favorited;
+   }
 
     public static Tweet fromJson(JSONObject jsonObject){
         Tweet tweet=new Tweet();
@@ -74,10 +76,10 @@ public class Tweet {
             tweet.id=jsonObject.getLong("id");
             tweet.body=jsonObject.getString("text");
             tweet.uid=jsonObject.getLong("id");
-            tweet.timeStamp= getRelativeTimeAgo(jsonObject.getString("created_at"));
+            tweet.timeStamp= Helper.getRelativeTimeAgo(jsonObject.getString("created_at"));
             tweet.user=User.fromJson(jsonObject.getJSONObject("user"));
             tweet.retweetCount=jsonObject.getInt("retweet_count");
-            tweet.retweeted=jsonObject.getBoolean("retweeted");
+           // tweet.retweeted=jsonObject.getBoolean("retweeted");
             if (jsonObject.has("entities")) {
                 if (jsonObject.getJSONObject("entities").has("media")){
                     if(jsonObject.getJSONObject("entities").getJSONArray("media").length() > 0) {
@@ -85,6 +87,7 @@ public class Tweet {
                     }
                 }
             }
+            tweet.favorited=jsonObject.getBoolean("favorited");
             tweet.favouritesCount=jsonObject.getInt("favourites_count");
 
 
@@ -114,42 +117,5 @@ public class Tweet {
         return tweets;
     }
 
-    public static final String TWITTER_FORMAT="EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
-    // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
-    public static String getRelativeTimeAgo(String rawJsonDate) {
-        String twitterFormat = TWITTER_FORMAT ;
-        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
-        sf.setLenient(true);
-
-        String relativeDate = "";
-        try {
-            long dateMillis = sf.parse(rawJsonDate).getTime();
-            relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
-                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return getTwitterFormat(relativeDate);
-    }
-
-    //covert to 12m, 13h, ... format
-    private static String getTwitterFormat(String relativeDate){
-        String tweetRelativeDate="";
-        int charCounter=0;
-
-        if(!Character.isDigit(relativeDate.charAt(0)))
-            return relativeDate;
-
-        for(int i=0; i<relativeDate.length();i++){
-            if(!Character.isDigit(relativeDate.charAt(i)) && relativeDate.charAt(i)!=' '){
-                charCounter++;
-                if(charCounter==2)
-                    break;
-            }
-            tweetRelativeDate=tweetRelativeDate+relativeDate.charAt(i);
-        }
-        return tweetRelativeDate;
-    }
 }

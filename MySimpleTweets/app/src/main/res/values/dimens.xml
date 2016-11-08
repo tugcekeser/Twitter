@@ -5,6 +5,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="pager_sliding_tab_strip_height">35dp</dimen>
+    <dimen name="profile_pager_sliding_tab_strip_height">20dp</dimen>
     <dimen name="one_dp_padding">1dp</dimen>
     <dimen name="two_dp_padding">2dp</dimen>
     <dimen name="indicator_height">2dp</dimen>
@@ -14,7 +15,7 @@
     <dimen name="minMargin">5dp</dimen>
     <dimen name="thumbnailHeight">200dp</dimen>
     <dimen name="iconSize">28dp</dimen>
-    <dimen name="app_bar_height">150dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
 </resources>

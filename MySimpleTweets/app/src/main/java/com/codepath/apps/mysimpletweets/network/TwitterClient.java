@@ -46,24 +46,24 @@ public class TwitterClient extends OAuthBaseClient {
 
 	// Compose tweet
 	public void postTweet(String tweet, String inReplyToStatusId, AsyncHttpResponseHandler handler) {
-		String api_url = getApiUrl(Client.POST_TWEET);
+		String apiUrl = getApiUrl(Client.POST_TWEET);
 		RequestParams params = new RequestParams();
 		params.put(Client.STATUS, tweet);
 		if (inReplyToStatusId != null)
 			params.put(Client.IN_REPLY_TO_REQUEST, inReplyToStatusId);
-		getClient().post(api_url, params, handler);
+		getClient().post(apiUrl, params, handler);
 	}
 
 	//Get Autorized User
 	public void getAutorizedUser(AsyncHttpResponseHandler handler) {
-		String api_url = getApiUrl(Client.GET_AUTORIZED_USER);
+		String apiUrl = getApiUrl(Client.GET_AUTORIZED_USER);
 		RequestParams params = new RequestParams();
-		getClient().get(api_url, params, handler);
+		getClient().get(apiUrl, params, handler);
 	}
 
 	//Get Mentions Tweets
 	public void getMentionsTimeLine( AsyncHttpResponseHandler handler,long max) {
-		String api_url = getApiUrl(Client.MENTIONS_TIMELINE);
+		String apiUrl = getApiUrl(Client.MENTIONS_TIMELINE);
 		RequestParams params = new RequestParams();
 		params.put(Client.COUNT_TAG, 25);
 		if (max == 1)
@@ -71,12 +71,12 @@ public class TwitterClient extends OAuthBaseClient {
 		else
 			params.put(Client.MAX_ID, max - 1);
 
-		getClient().get(api_url, params, handler);
+		getClient().get(apiUrl, params, handler);
 	}
 
 
 	public void getUserTimeLine(long userId, AsyncHttpResponseHandler handler, long max) {
-		String api_url = getApiUrl(Client.GET_USER_TIMELINE);
+		String apiUrl = getApiUrl(Client.GET_USER_TIMELINE);
 		RequestParams params = new RequestParams();
 		params.put(Client.COUNT_TAG, 25);
 		params.put("user_id", userId);
@@ -84,25 +84,11 @@ public class TwitterClient extends OAuthBaseClient {
 			params.put(Client.SINCE_ID, 1);
 		else
 			params.put(Client.MAX_ID, max - 1);
-		getClient().get(api_url, params, handler);
+		getClient().get(apiUrl, params, handler);
 	}
-
-	/*public void getUserPhotos(long userId, AsyncHttpResponseHandler handler,long max) {
-		String api_url = getApiUrl(Client.GET_USER_TIMELINE);
-		RequestParams params = new RequestParams();
-		params.put(Client.COUNT_TAG, 25);
-		params.put("user_id", userId);
-		params.put("exclude_replies", "true");
-		params.put("include_rts", "false");
-		if (max == 1)
-			params.put(Client.SINCE_ID, 1);
-		else
-			params.put(Client.MAX_ID, max - 1);
-		getClient().get(api_url, params, handler);
-	}*/
 
 	public void getUserLikes(long userId, AsyncHttpResponseHandler handler, long max) {
-		String api_url = getApiUrl(Client.GET_FAVORITES_LIST);
+		String apiUrl = getApiUrl(Client.GET_FAVORITES_LIST);
 		RequestParams params = new RequestParams();
 		params.put(Client.COUNT_TAG, 25);
 		params.put("user_id", userId);
@@ -110,26 +96,77 @@ public class TwitterClient extends OAuthBaseClient {
 			params.put(Client.SINCE_ID, 1);
 		else
 			params.put(Client.MAX_ID, max - 1);
-		getClient().get(api_url, params, handler);
+		getClient().get(apiUrl, params, handler);
 	}
 
-	public void getFollowers(String screenName, long cursorId, AsyncHttpResponseHandler handler) {
-		String api_url = getApiUrl(Client.GET_FOLLOWERS);
+	public void getFollowers(long userId, AsyncHttpResponseHandler handler,long max) {
+		String apiUrl = getApiUrl(Client.GET_FOLLOWERS);
 		RequestParams params = new RequestParams();
-		params.put(Client.COUNT_TAG, 25);
-		params.put(Client.SCREEN_NAME, screenName);
+		params.put(Client.COUNT_TAG, 10);
+		params.put("user_id", userId);
 		params.put("skip_status", "true");
-		params.put("cursor", cursorId);
-		getClient().get(api_url, params, handler);
+		params.put("cursor", max);
+		getClient().get(apiUrl, params, handler);
 	}
 
-	public void getFollowing(String screenName, long cursorId, AsyncHttpResponseHandler handler) {
+	public void getFollowing(long userId, AsyncHttpResponseHandler handler,long max) {
 		String api_url = getApiUrl(Client.GET_FOLLOWING);
 		RequestParams params = new RequestParams();
 		params.put(Client.COUNT_TAG, 10);
-		params.put(Client.SCREEN_NAME, screenName);
+		params.put("user_id", userId);
 		params.put("skip_status", "true");
-		params.put("cursor", cursorId);
+		params.put("cursor", max);
 		getClient().get(api_url, params, handler);
+	}
+
+	public void searchTweets(String query, AsyncHttpResponseHandler handler, long max) {
+		String apiUrl = getApiUrl(Client.SEARCH_TWEETS);
+		RequestParams params = new RequestParams();
+		params.put("q", query);
+		params.put("count", 25);
+		if (max == 1)
+			params.put(Client.SINCE_ID, 1);
+		else
+			params.put(Client.MAX_ID, max - 1);
+		getClient().get(apiUrl, params, handler);
+	}
+
+	public void addRemoveFavourite(long id, boolean liked, AsyncHttpResponseHandler handler) {
+		String apiUrl;
+		if (liked)
+			apiUrl = getApiUrl(Client.ADD_FAVORITE);
+		else
+			apiUrl = getApiUrl(Client.REMOVE_FAVORITE);
+
+		RequestParams params = new RequestParams();
+		params.put("id", id);
+		getClient().post(apiUrl, params, handler);
+	}
+
+	public void getMessages(AsyncHttpResponseHandler handler, long max) {
+		String apiUrl = getApiUrl(Client.GET_DIRECT_MESSAGES);
+
+		RequestParams params = new RequestParams();
+		params.put("count", 25);
+		if (max == 1)
+			params.put(Client.SINCE_ID, 1);
+		else
+			params.put(Client.MAX_ID, max - 1);
+		getClient().get(apiUrl, params, handler);
+	}
+
+	public void sendMessage(String screenName, String text, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl(Client.SEND_MESSAGE);
+		RequestParams params = new RequestParams();
+		params.put(Client.SCREEN_NAME, screenName);
+		params.put("text", text);
+		getClient().post(apiUrl, params, handler);
+	}
+
+	public void getUser(String screenName, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl(Client.SHOW_USER);
+		RequestParams params = new RequestParams();
+		params.put(Client.SCREEN_NAME, screenName);
+		getClient().get(apiUrl, params, handler);
 	}
 }

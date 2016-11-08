@@ -2,32 +2,51 @@ package com.codepath.apps.mysimpletweets.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.activities.ProfileActivity;
 import com.codepath.apps.mysimpletweets.activities.TweetDetailActivity;
+import com.codepath.apps.mysimpletweets.constants.General;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.models.User;
+import com.codepath.apps.mysimpletweets.network.TwitterApp;
+import com.codepath.apps.mysimpletweets.network.TwitterClient;
+import com.codepath.apps.mysimpletweets.utils.Network;
+import com.codepath.apps.mysimpletweets.utils.PatternEditableBuilder;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
+import cz.msebera.android.httpclient.Header;
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 /**
  * Created by Tugce on 10/29/2016.
  */
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
-    public static final String TWEET="Tweet";
-    public static final String INITIAL_NAME="@";
+
 
     public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
         super(context,0, tweets);
@@ -46,22 +65,31 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
         tvUserName.setText(tweet.getUser().getName());
         tvBody.setText(tweet.getBody());
+        new PatternEditableBuilder().
+                addPattern(Pattern.compile("\\@(\\w+)"), R.color.linkColor,
+                        new PatternEditableBuilder.SpannableClickedListener() {
+                            @Override
+                            public void onSpanClicked(String text) {
+                                getUser(text);
+                            }
+                        }).into(tvBody);
+
         ivProfileImage.setImageResource(android.R.color.transparent);
-        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl())
-                .transform(new RoundedCornersTransformation(3, 3))
+        Glide.with(getContext()).load(tweet.getUser().getProfileImageUrl())
+                .bitmapTransform(new jp.wasabeef.glide.transformations.RoundedCornersTransformation(getContext(),3,3))
                 .into(ivProfileImage);
 
         TextView tvRetweetsCount=(TextView) convertView.findViewById(R.id.tvRetweetsCount);
         tvRetweetsCount.setText(Integer.toString(tweet.getRetweetCount()));
 
-        TextView tvFavouritesCount=(TextView) convertView.findViewById(R.id.tvFavouritesCount);
+        final TextView tvFavouritesCount=(TextView) convertView.findViewById(R.id.tvFavouritesCount);
         tvFavouritesCount.setText(Integer.toString(tweet.getFavouritesCount()));
 
         TextView tvTimeStamp=(TextView)convertView.findViewById(R.id.tvTimeStamp);
         tvTimeStamp.setText(tweet.getTimeStamp());
 
         TextView tvSource=(TextView)convertView.findViewById(R.id.tvName);
-        tvSource.setText("@"+tweet.getUser().getScreenName());
+        tvSource.setText(General.INITIAL_NAME+tweet.getUser().getScreenName());
 
         ivProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,15 +100,97 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             }
         });
 
+        ImageView ivMedia=(ImageView)convertView.findViewById(R.id.ivMedia);
+
+        Glide.with(getContext()).load(tweet.getMediaURL())
+                .bitmapTransform(new jp.wasabeef.glide.transformations.RoundedCornersTransformation(getContext(),10,10))
+                .into(ivMedia);
+
+        final ImageView btnLike=(ImageView) convertView.findViewById(R.id.btnLike);
+
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(getContext(), TweetDetailActivity.class)
-                        .putExtra(TWEET, Parcels.wrap(tweet));
+                        .putExtra(General.TWEET, Parcels.wrap(tweet));
                 getContext().startActivity(i);
             }
         });
-        return convertView;
 
+        if(tweet.getFavorited()){
+            btnLike.setImageResource(R.drawable.liked);
+            tvFavouritesCount.setTextColor(getContext().getResources().getColor(R.color.likedButtonColor));
+        }
+        else{
+            btnLike.setImageResource(R.drawable.like);
+            tvFavouritesCount.setTextColor(getContext().getResources().getColor(R.color.colorLine));
+        }
+
+        btnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!tweet.getFavorited()){
+                    btnLike.setImageResource(R.drawable.liked);
+                    tvFavouritesCount.setTextColor(getContext().getResources().getColor(R.color.likedButtonColor));
+                    addRemoveFavourite(true,tweet.getId());
+                }
+                else{
+                    btnLike.setImageResource(R.drawable.like);
+                    tvFavouritesCount.setTextColor(getContext().getResources().getColor(R.color.colorLine));
+                    addRemoveFavourite(false,tweet.getId());
+                }
+            }
+        });
+        return convertView;
+    }
+
+    private void getUser(String screenName){
+
+        if(!Network.isNetworkAvailable(getContext())){
+            Toast.makeText(getContext(),"Please check your internet connection",Toast.LENGTH_LONG);
+        }
+
+        TwitterClient client=TwitterApp.getRestClient();
+        client.getUser(screenName.substring(1,screenName.length()),new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                Log.d(General.DEBUG,response.toString());
+                User user = User.fromJson(response);
+                Intent intent=new Intent(getContext(),ProfileActivity.class)
+                        .putExtra("User", Parcels.wrap(user));
+                getContext().startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Log.d(General.DEBUG,errorResponse.toString());
+            }
+        });
+    }
+
+    private void addRemoveFavourite(boolean liked,long tweetId){
+
+        if(!Network.isNetworkAvailable(getContext())){
+            Toast.makeText(getContext(),"Please check your internet connection",Toast.LENGTH_LONG);
+        }
+
+        TwitterClient client=TwitterApp.getRestClient();
+        client.addRemoveFavourite(tweetId,liked,new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                Log.d(General.DEBUG,response.toString());
+                Tweet tweet = Tweet.fromJson(response);
+                //TODO:Refresh required to see
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Log.d(General.DEBUG,errorResponse.toString());
+            }
+        });
     }
 }

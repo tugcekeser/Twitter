@@ -1,8 +1,11 @@
 package com.codepath.apps.mysimpletweets.models;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
+
+import java.util.ArrayList;
 
 /**
  * Created by Tugce on 10/29/2016.
@@ -75,7 +78,10 @@ public class User {
     }
 
     public String getUrl() {
-        return url;
+        if(url.equals("null"))
+            return "";
+        else
+             return url;
     }
 
     public static User fromJson(JSONObject jsonObject){
@@ -91,7 +97,7 @@ public class User {
             user.followersCount=jsonObject.getInt("followers_count");
             user.friendsCount=jsonObject.getInt("friends_count");
             user.location=jsonObject.getString("location");
-            user.profileBackgroundImageUrl=jsonObject.getString("profile_background_image_url");
+            user.profileBackgroundImageUrl=jsonObject.getString("profile_background_image_url_https");
             user.statusesCount=jsonObject.getInt("statuses_count");
             user.url=jsonObject.getString("url");
 
@@ -100,5 +106,24 @@ public class User {
         }
 
         return user;
+    }
+
+    public static ArrayList<User> fromJsonArray(JSONArray jsonArray){
+        ArrayList<User> users=new ArrayList<User>();
+        for(int i=0;i<jsonArray.length();i++){
+            try {
+                JSONObject userJson=jsonArray.getJSONObject(i);
+                User user=User.fromJson(userJson);
+                if(user!=null) {
+                    users.add(user);
+                    continue;
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return users;
     }
 }

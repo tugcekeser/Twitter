@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
@@ -22,6 +23,7 @@ import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.network.TwitterApp;
 import com.codepath.apps.mysimpletweets.network.TwitterClient;
+import com.codepath.apps.mysimpletweets.utils.Network;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
@@ -58,6 +60,8 @@ public class TweetDetailActivity extends AppCompatActivity {
         binding.tvTime.setText(tweet.getTimeStamp());
         binding.tvName.setText(General.INITIAL_NAME + tweet.getUser().getName());
         binding.etReply.addTextChangedListener(textWatcher);
+        binding.etReply.setText(General.INITIAL_NAME+tweet.getUser().getScreenName());
+        binding.etReply.requestFocus((General.INITIAL_NAME+tweet.getUser().getScreenName()).length()+1);
 
         binding.tvCount.setText(Integer.toString(General.TWEET_CHARACTER_COUNT));
         binding.btnReply.setEnabled(false);
@@ -72,6 +76,11 @@ public class TweetDetailActivity extends AppCompatActivity {
 
     //Reply tweet
     public void replyTweet(String tweet) {
+
+        if(Network.isNetworkAvailable(getApplicationContext())){
+            Toast.makeText(getApplicationContext(),"Please check your internet connection",Toast.LENGTH_LONG);
+        }
+
         TwitterClient client = TwitterApp.getRestClient();
 
         client.postTweet(tweet,String.valueOf(this.tweet.getId()), new JsonHttpResponseHandler() {

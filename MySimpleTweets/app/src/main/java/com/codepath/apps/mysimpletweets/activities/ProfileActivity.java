@@ -1,13 +1,17 @@
 package com.codepath.apps.mysimpletweets.activities;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.bumptech.glide.Glide;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.adapters.ProfilePagerAdapter;
 import com.codepath.apps.mysimpletweets.constants.General;
@@ -43,19 +47,43 @@ public class ProfileActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(binding.toolbar);
-        binding.toolbarLayout.setBackgroundColor(getResources().getColor(R.color.colorLine));
+        binding.toolbarLayout.setBackgroundResource(R.drawable.twitter_background);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         user = (User) Parcels.unwrap(getIntent().getParcelableExtra("User"));
-
+       // getSupportActionBar().setTitle(General.INITIAL_NAME+user.getScreenName());
+        binding.ivBackgroundImage.setImageResource(0);
         binding.ivProfileImage.setImageResource(0);
-        Picasso.with(ProfileActivity.this).load(user.getProfileImageUrl())
-                .transform(new RoundedCornersTransformation(3, 3))
+
+        Glide.with(ProfileActivity.this).load(user.getProfileImageUrl())
+                .bitmapTransform(new jp.wasabeef.glide.transformations.RoundedCornersTransformation(this,5,5))
                 .into(binding.ivProfileImage);
+
+        Glide.with(ProfileActivity.this).load(user.getProfileBackgroundImageUrl())
+                .bitmapTransform(new jp.wasabeef.glide.transformations.RoundedCornersTransformation(this,40,40))
+                .into(binding.ivBackgroundImage);
 
         tvName.setText(user.getName());
         tvScreenName.setText(General.INITIAL_NAME+user.getScreenName());
         tvFollowingCount.setText(Integer.toString(user.getFriendsCount()));
+        tvFollowingCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(ProfileActivity.this, FollowingActivity.class)
+                        .putExtra("User", Parcels.wrap(user));
+               startActivity(i);
+            }
+        });
         tvFollowerCount.setText(Integer.toString(user.getFollowersCount()));
+        tvFollowerCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(ProfileActivity.this, FollowersActivity.class)
+                        .putExtra("User", Parcels.wrap(user));
+                startActivity(i);
+            }
+        });
         tvDescription.setText(user.getDescription());
         tvLocation.setText(user.getLocation());
         tvWebsite.setText(user.getUrl());

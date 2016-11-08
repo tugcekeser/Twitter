@@ -94,20 +94,20 @@ public class ComposeTweetFragment extends DialogFragment {
 
     //Post Tweet
     public void postTweet(String tweet) {
-            TwitterClient client = TwitterApp.getRestClient();
+        TwitterClient client = TwitterApp.getRestClient();
 
-                client.postTweet(tweet, null, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        Tweet newTweet = Tweet.fromJson(response);
-                        composeTweetDialogListener.onFinishEditDialog(newTweet);
-                    }
+        client.postTweet(tweet, null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Tweet newTweet = Tweet.fromJson(response);
+                composeTweetDialogListener.onFinishEditDialog(newTweet);
+            }
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        Log.v(General.TWITTER, errorResponse.toString());
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.v(General.TWITTER, errorResponse.toString());
                     }
-                });
+        });
         dismiss();
     }
 

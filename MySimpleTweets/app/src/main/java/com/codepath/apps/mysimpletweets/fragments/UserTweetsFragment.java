@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
@@ -18,6 +19,7 @@ import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.network.TwitterApp;
 import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.utils.EndlessScrollListener;
+import com.codepath.apps.mysimpletweets.utils.Network;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -36,7 +38,6 @@ public class UserTweetsFragment extends Fragment {
     private TweetsArrayAdapter aTweets;
     private ArrayList<Tweet> tweets;
     private long maxId=1;
-    private SwipeRefreshLayout swipeContainer;
     private static User pUser;
 
     private int mPage;
@@ -70,9 +71,7 @@ public class UserTweetsFragment extends Fragment {
                 inflater, R.layout.fragment_timeline, container, false);
         View view = binding.getRoot();
 
-        swipeContainer=(SwipeRefreshLayout)view.findViewById(R.id.scTimeline);
-
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        binding.scTimeline.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 populateUserTweets(1);
@@ -80,7 +79,7 @@ public class UserTweetsFragment extends Fragment {
         });
 
         // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+        binding.scTimeline.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light);
 
         populateUserTweets(1);
@@ -104,6 +103,10 @@ public class UserTweetsFragment extends Fragment {
         if(max==1 && tweets.size()>0)
             aTweets.clear();
 
+        if(!Network.isNetworkAvailable(getContext())){
+            Toast.makeText(getContext(),"Please check your internet connection",Toast.LENGTH_LONG);
+        }
+
         client.getUserTimeLine(pUser.getUid(),new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -116,7 +119,7 @@ public class UserTweetsFragment extends Fragment {
                     maxId = mostRecentTweet.getId();
                 }
                 Log.d(General.DEBUG,aTweets.toString());
-                swipeContainer.setRefreshing(false);
+                binding.scTimeline.setRefreshing(false);
             }
 
             @Override

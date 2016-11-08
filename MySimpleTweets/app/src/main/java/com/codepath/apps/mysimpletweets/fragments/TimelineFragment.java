@@ -1,13 +1,19 @@
 package com.codepath.apps.mysimpletweets.fragments;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.constants.General;
@@ -17,6 +23,7 @@ import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.utils.EndlessScrollListener;
+import com.codepath.apps.mysimpletweets.utils.Network;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -32,7 +39,7 @@ public class TimelineFragment extends Fragment {
     private TweetsArrayAdapter aTweets;
     private ArrayList<Tweet> tweets;
     private long maxId=1;
-    private SwipeRefreshLayout swipeContainer;
+    // private ProgressBar progressBarFooter;
 
     private int mPage;
 
@@ -64,25 +71,19 @@ public class TimelineFragment extends Fragment {
                 inflater, R.layout.fragment_timeline, container, false);
         View view = binding.getRoot();
 
-        swipeContainer=(SwipeRefreshLayout)view.findViewById(R.id.scTimeline);
-
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        binding.scTimeline.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                update();
+                populateTimeline(1);
             }
         });
 
         // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+        binding.scTimeline.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light);
 
         populateTimeline(1);
         return view;
-    }
-    private void update(){
-        aTweets.clear();
-        populateTimeline(1);
     }
 
     @Override
@@ -95,12 +96,27 @@ public class TimelineFragment extends Fragment {
                 return true;
             }
         });
+
         binding.lvTweets.setAdapter(aTweets);
     }
 
+   /* public void setupListWithFooter() {
+        // Inflate the footer
+        View footer=LayoutInflater.from(getContext()).inflate(R.layout.footer_progress,null);
+        // Find the progressbar within footer
+        progressBarFooter = (ProgressBar)
+                footer.findViewById(R.id.pbFooterLoading);
+        // Add footer to ListView before setting adapter
+        binding.lvTweets.addFooterView(footer);
+    }*/
+
     private void populateTimeline(long max){
-       /* if(max==1 && tweets.size()>0)
-            aTweets.clear();*/
+        if(max==1 && tweets.size()>0)
+            aTweets.clear();
+
+        if(!Network.isNetworkAvailable(getContext())){
+            Toast.makeText(getContext(),"Please check your internet connection",Toast.LENGTH_LONG);
+        }
 
         client.getHomeTimeline(new JsonHttpResponseHandler(){
             @Override
@@ -114,7 +130,7 @@ public class TimelineFragment extends Fragment {
                     maxId = mostRecentTweet.getId();
                 }
                 Log.d(General.DEBUG,aTweets.toString());
-                swipeContainer.setRefreshing(false);
+                binding.scTimeline.setRefreshing(false);
             }
 
             @Override
@@ -124,5 +140,6 @@ public class TimelineFragment extends Fragment {
             }
         }, max);
     }
+
 
 }

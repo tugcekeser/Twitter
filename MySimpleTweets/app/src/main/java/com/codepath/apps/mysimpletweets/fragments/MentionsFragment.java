@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
@@ -20,6 +21,7 @@ import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.network.TwitterApp;
 import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.utils.EndlessScrollListener;
+import com.codepath.apps.mysimpletweets.utils.Network;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -37,7 +39,6 @@ public class MentionsFragment extends Fragment{
     private TweetsArrayAdapter aMentions;
     private ArrayList<Tweet> mentions;
     private long maxId=1;
-    private SwipeRefreshLayout swipeContainer;
     private int mPage;
 
     public static MentionsFragment newInstance(int page) {
@@ -67,9 +68,7 @@ public class MentionsFragment extends Fragment{
                 inflater, R.layout.fragment_timeline, container, false);
         View view = binding.getRoot();
 
-        swipeContainer=(SwipeRefreshLayout)view.findViewById(R.id.scTimeline);
-
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        binding.scTimeline.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 populateMentions(1);
@@ -77,7 +76,7 @@ public class MentionsFragment extends Fragment{
         });
 
         // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+        binding.scTimeline.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light);
 
         populateMentions(1);
@@ -101,6 +100,10 @@ public class MentionsFragment extends Fragment{
         if(max==1 && mentions.size()>0)
             aMentions.clear();
 
+        if(!Network.isNetworkAvailable(getContext())){
+            Toast.makeText(getContext(),"Please check your internet connection",Toast.LENGTH_LONG);
+        }
+
         client.getMentionsTimeLine(new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -113,7 +116,7 @@ public class MentionsFragment extends Fragment{
                     maxId = mostRecentTweet.getId();
                 }
                 Log.d(General.DEBUG,aMentions.toString());
-                swipeContainer.setRefreshing(false);
+                binding.scTimeline.setRefreshing(false);
             }
 
             @Override
