@@ -101,7 +101,7 @@ public class MentionsFragment extends Fragment{
             aMentions.clear();
 
         if(!Network.isNetworkAvailable(getContext())){
-            Toast.makeText(getContext(),"Please check your internet connection",Toast.LENGTH_LONG);
+            Toast.makeText(getContext(),General.INTERNET_CONNECTION_ALERT,Toast.LENGTH_LONG);
         }
 
         client.getMentionsTimeLine(new JsonHttpResponseHandler(){

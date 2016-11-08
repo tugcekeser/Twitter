@@ -104,7 +104,7 @@ public class UserLikesFragment extends Fragment{
             aTweets.clear();
 
         if(!Network.isNetworkAvailable(getContext())){
-            Toast.makeText(getContext(),"Please check your internet connection",Toast.LENGTH_LONG);
+            Toast.makeText(getContext(),General.INTERNET_CONNECTION_ALERT,Toast.LENGTH_LONG);
         }
 
         client.getUserLikes(pUser.getUid(),new JsonHttpResponseHandler(){

@@ -52,7 +52,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         super(context,0, tweets);
     }
 
-    //TODO: viewleri ButterKnife yap!
+    //TODO:ButterKnife
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final Tweet tweet=getItem(position);
@@ -95,7 +95,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(getContext(), ProfileActivity.class)
-                        .putExtra("User", Parcels.wrap(tweet.getUser()));
+                        .putExtra(General.USER, Parcels.wrap(tweet.getUser()));
                 getContext().startActivity(i);
             }
         });
@@ -147,7 +147,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     private void getUser(String screenName){
 
         if(!Network.isNetworkAvailable(getContext())){
-            Toast.makeText(getContext(),"Please check your internet connection",Toast.LENGTH_LONG);
+            Toast.makeText(getContext(),General.INTERNET_CONNECTION_ALERT,Toast.LENGTH_LONG);
         }
 
         TwitterClient client=TwitterApp.getRestClient();
@@ -158,7 +158,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                 Log.d(General.DEBUG,response.toString());
                 User user = User.fromJson(response);
                 Intent intent=new Intent(getContext(),ProfileActivity.class)
-                        .putExtra("User", Parcels.wrap(user));
+                        .putExtra(General.USER, Parcels.wrap(user));
                 getContext().startActivity(intent);
             }
 
@@ -173,7 +173,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     private void addRemoveFavourite(boolean liked,long tweetId){
 
         if(!Network.isNetworkAvailable(getContext())){
-            Toast.makeText(getContext(),"Please check your internet connection",Toast.LENGTH_LONG);
+            Toast.makeText(getContext(),General.INTERNET_CONNECTION_ALERT,Toast.LENGTH_LONG);
         }
 
         TwitterClient client=TwitterApp.getRestClient();

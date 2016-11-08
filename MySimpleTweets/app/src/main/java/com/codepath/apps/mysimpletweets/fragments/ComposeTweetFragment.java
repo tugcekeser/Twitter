@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.constants.General;
@@ -21,6 +22,7 @@ import com.codepath.apps.mysimpletweets.databinding.FragmentComposeTweetBinding;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.network.TwitterApp;
 import com.codepath.apps.mysimpletweets.network.TwitterClient;
+import com.codepath.apps.mysimpletweets.utils.Network;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -95,7 +97,9 @@ public class ComposeTweetFragment extends DialogFragment {
     //Post Tweet
     public void postTweet(String tweet) {
         TwitterClient client = TwitterApp.getRestClient();
-
+        if(!Network.isNetworkAvailable(getContext())){
+            Toast.makeText(getContext(),General.INTERNET_CONNECTION_ALERT,Toast.LENGTH_LONG);
+        }
         client.postTweet(tweet, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

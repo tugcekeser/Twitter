@@ -37,7 +37,7 @@ public class MessagesArrayAdapter extends ArrayAdapter<Message>{
         super(context,0, messages);
     }
 
-    //TODO: viewleri ButterKnife yap!
+    //TODO:ButterKnife!
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final Message message=getItem(position);

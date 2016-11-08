@@ -54,7 +54,7 @@ public class FollowersFollowingArrayAdapter extends ArrayAdapter<User> {
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(getContext(), ProfileActivity.class)
-                        .putExtra("User", Parcels.wrap(user));
+                        .putExtra(General.USER, Parcels.wrap(user));
                 getContext().startActivity(i);
             }
         });

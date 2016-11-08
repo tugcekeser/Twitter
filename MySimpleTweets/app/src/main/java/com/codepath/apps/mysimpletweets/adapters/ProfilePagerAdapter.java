@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.constants.General;
 import com.codepath.apps.mysimpletweets.fragments.MentionsFragment;
 import com.codepath.apps.mysimpletweets.fragments.TimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.UserLikesFragment;
@@ -19,7 +20,7 @@ import com.codepath.apps.mysimpletweets.models.User;
 public class ProfilePagerAdapter extends FragmentPagerAdapter {
     private static int PAGE_COUNT = 3;
     private User user;
-    private String tabTitles[] = new String[] { "TWEETS", "MEDIA", "LIKES" };
+    private String tabTitles[] = new String[] {General.TWEETS, General.MEDIA, General.LIKES };
 
     public ProfilePagerAdapter(FragmentManager fragmentManager,User user) {
         super(fragmentManager);

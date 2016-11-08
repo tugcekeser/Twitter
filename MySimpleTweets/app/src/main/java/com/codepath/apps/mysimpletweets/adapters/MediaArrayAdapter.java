@@ -25,7 +25,6 @@ public class MediaArrayAdapter  extends ArrayAdapter<Tweet> {
     public MediaArrayAdapter(Context context, List<Tweet> tweets) {
         super(context,0, tweets);
         mContext=context;
-
     }
 
     @Override
