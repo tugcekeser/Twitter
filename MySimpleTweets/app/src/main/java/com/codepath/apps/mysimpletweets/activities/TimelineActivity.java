@@ -3,20 +3,26 @@ package com.codepath.apps.mysimpletweets.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.adapters.HomePagerAdapter;
 import com.codepath.apps.mysimpletweets.constants.General;
@@ -33,28 +39,43 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
 
 public class TimelineActivity extends AppCompatActivity implements ComposeTweetFragment.ComposeTweetDialogListener {
 
-    private ActivityTimelineBinding binding;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.ivProfileImage)
+    ImageView ivProfileImage;
+    @BindView(R.id.btnCompose)
+    FloatingActionButton btnCompose;
+    @BindView(R.id.vpMain)
+    ViewPager vpMain;
+    @BindView(R.id.tabs)
+    PagerSlidingTabStrip tabs;
+
     private HomePagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_timeline);
-        setSupportActionBar(binding.toolbar);
+        setContentView(R.layout.activity_timeline);
+        ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
 
         adapter=new HomePagerAdapter(getSupportFragmentManager());
-        binding.vpMain.setAdapter(adapter);
-        binding.tabs.setViewPager(binding.vpMain);
-        binding.ivProfileImage.setImageResource(0);
+        vpMain.setAdapter(adapter);
+        tabs.setViewPager(vpMain);
+        ivProfileImage.setImageResource(0);
 
         getAutorizedUser();
 
-        binding.btnCompose.setOnClickListener(new View.OnClickListener() {
+        btnCompose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showEditDialog();
@@ -64,19 +85,15 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (item.getItemId() == R.id.action_message) {
+        /*if (item.getItemId() == R.id.action_message) {
             Intent intent=new Intent(this,NewMessageActivity.class);
             startActivity(intent);
-        }
-        //noinspection SimplifiableIfStatement
+        }*/
+
         return super.onOptionsItemSelected(item);
     }
 
-    // Inflate the menu; this adds items to the action bar if it is present.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.timeline_menu, menu);
@@ -114,9 +131,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
                 final User currentUser = User.fromJson(response);
 
                 Picasso.with(TimelineActivity.this).load(currentUser.getProfileImageUrl())
-                        .into(binding.ivProfileImage);
+                        .into(ivProfileImage);
 
-                binding.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+                ivProfileImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent i=new Intent(TimelineActivity.this, ProfileActivity.class).putExtra("User", Parcels.wrap(currentUser));
@@ -133,12 +150,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
 
     @Override
     public void onFinishEditDialog(Tweet tweet) {
-      /* Fragment fr= adapter.getItem(0);
-        if(fr instanceof TimelineFragment)
-        {
-            ((TimelineFragment) fr).addTweet(tweet);
-        }*/
-        binding.vpMain.getAdapter().notifyDataSetChanged();
+        vpMain.getAdapter().notifyDataSetChanged();
     }
 
 }

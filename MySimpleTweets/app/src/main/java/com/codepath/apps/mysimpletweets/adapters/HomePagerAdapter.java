@@ -14,8 +14,8 @@ import com.codepath.apps.mysimpletweets.fragments.TimelineFragment;
  * Created by Tugce on 11/4/2016.
  */
 public class HomePagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.IconTabProvider {
-    private static int PAGE_COUNT = 3;
-    private int tabIcons[] = {R.drawable.home,R.drawable.mentions,R.drawable.messages};
+    private static int PAGE_COUNT = 2;
+    private int tabIcons[] = {R.drawable.home,R.drawable.mentions};//,R.drawable.messages};
 
     public HomePagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -32,10 +32,10 @@ public class HomePagerAdapter extends FragmentPagerAdapter implements PagerSlidi
     public Fragment getItem(int position) {
         if(position==0)
             return TimelineFragment.newInstance(position);
-        else if(position==1)
+        else //if(position==1)
             return MentionsFragment.newInstance(position);
-        else
-            return MessageFragment.newInstance(position);
+       /* else
+            return MessageFragment.newInstance(position);*/
     }
 
     @Override

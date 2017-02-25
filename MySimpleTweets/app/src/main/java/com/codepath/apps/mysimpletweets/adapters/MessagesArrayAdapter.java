@@ -44,42 +44,43 @@ public class MessagesArrayAdapter extends ArrayAdapter<Message>{
         if(convertView==null){
             convertView= LayoutInflater.from(getContext()).inflate(R.layout.item_message,parent,false);
         }
+        if(position==0) {
+            CircleImageView ivProfileImage = (CircleImageView) convertView.findViewById(R.id.ivProfileImage);
+            TextView tvScreenName = (TextView) convertView.findViewById(R.id.tvScreenName);
+            TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
+            TextView tvText = (TextView) convertView.findViewById(R.id.tvText);
 
-        CircleImageView ivProfileImage=(CircleImageView)convertView.findViewById(R.id.ivProfileImage);
-        TextView tvScreenName=(TextView)convertView.findViewById(R.id.tvScreenName);
-        TextView tvName=(TextView)convertView.findViewById(R.id.tvName);
-        TextView tvText=(TextView)convertView.findViewById(R.id.tvText);
-
-        tvScreenName.setText(General.INITIAL_NAME+message.getSender().getScreenName());
-        tvName.setText(message.getSender().getName());
-        tvText.setText(message.getText());
-
-
-        new PatternEditableBuilder().
-                addPattern(Pattern.compile("\\@(\\w+)"), R.color.linkColor,
-                        new PatternEditableBuilder.SpannableClickedListener() {
-                            @Override
-                            public void onSpanClicked(String text) {
-                                //TODO:
-                            }
-                        }).into(tvText);
-
-        ivProfileImage.setImageResource(android.R.color.transparent);
-
-        Glide.with(getContext()).load(message.getSender().getProfileImageUrl())
-                .bitmapTransform(new jp.wasabeef.glide.transformations.RoundedCornersTransformation(getContext(),3,3))
-                .into(ivProfileImage);
-
-        TextView tvTimeStamp=(TextView)convertView.findViewById(R.id.tvTimeStamp);
-        tvTimeStamp.setText(message.getCreatedAt());
+            tvScreenName.setText(General.INITIAL_NAME + message.getSender().getScreenName());
+            tvName.setText(message.getSender().getName());
+            tvText.setText(message.getText());
 
 
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            new PatternEditableBuilder().
+                    addPattern(Pattern.compile("\\@(\\w+)"), R.color.linkColor,
+                            new PatternEditableBuilder.SpannableClickedListener() {
+                                @Override
+                                public void onSpanClicked(String text) {
+                                    //TODO:
+                                }
+                            }).into(tvText);
 
-            }
-        });
+            ivProfileImage.setImageResource(android.R.color.transparent);
+
+            Glide.with(getContext()).load(message.getSender().getProfileImageUrl())
+                    .bitmapTransform(new jp.wasabeef.glide.transformations.RoundedCornersTransformation(getContext(), 3, 3))
+                    .into(ivProfileImage);
+
+            TextView tvTimeStamp = (TextView) convertView.findViewById(R.id.tvTimeStamp);
+            tvTimeStamp.setText(message.getCreatedAt());
+
+
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+        }
         return convertView;
     }
 }

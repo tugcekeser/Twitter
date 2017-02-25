@@ -10,7 +10,7 @@
     <dimen name="two_dp_padding">2dp</dimen>
     <dimen name="indicator_height">2dp</dimen>
     <dimen name="standard_padding">5dp</dimen>
-    <dimen name="profile_image_size">54dp</dimen>
+    <dimen name="profile_image_size">55dp</dimen>
     <dimen name="standard_margin">10dp</dimen>
     <dimen name="minMargin">5dp</dimen>
     <dimen name="thumbnailHeight">200dp</dimen>

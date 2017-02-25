@@ -1,22 +1,17 @@
 package com.codepath.apps.mysimpletweets.activities;
 
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.adapters.FollowersFollowingArrayAdapter;
-import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.constants.General;
-import com.codepath.apps.mysimpletweets.databinding.ActivityFollowingBinding;
-import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.network.TwitterApp;
 import com.codepath.apps.mysimpletweets.network.TwitterClient;
@@ -31,34 +26,33 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
 public class FollowingActivity extends AppCompatActivity {
-    private ActivityFollowingBinding binding;
     private TwitterClient client;
     private FollowersFollowingArrayAdapter aFollowing;
     private ArrayList<User> following;
     private long maxId=(-1);
     private SwipeRefreshLayout swipeContainer;
-    private ListView lvFollowing;
+    private ListView lvFollowingFollowers;
     private User user;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_following);
+        setContentView(R.layout.activity_followers_following);
+        ButterKnife.bind(this);
 
-        setSupportActionBar(binding.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Following");
 
         user = (User) Parcels.unwrap(getIntent().getParcelableExtra(General.USER));
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               //TODO:
-            }
-        });
 
         client= TwitterApp.getRestClient();
         following=new ArrayList<User>();
@@ -75,15 +69,15 @@ public class FollowingActivity extends AppCompatActivity {
         // Configure the refreshing colors
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light);
-        lvFollowing=(ListView)findViewById(R.id.lvFollowing);
-        lvFollowing.setOnScrollListener(new EndlessScrollListener() {
+        lvFollowingFollowers=(ListView)findViewById(R.id.lvFollowingFollowers);
+        lvFollowingFollowers.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
                 populateFollowing(maxId);
                 return true;
             }
         });
-        lvFollowing.setAdapter(aFollowing);
+        lvFollowingFollowers.setAdapter(aFollowing);
 
         populateFollowing((-1));
     }
