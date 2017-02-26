@@ -47,9 +47,10 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:weightSum="6"
-            android:layout_margin="5dp">
+            android:layout_margin="5dp"
+            android:gravity="right">
 
-           <ImageButton
+       <!--    <ImageButton
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:id="@+id/btnUploadImage"
@@ -85,7 +86,7 @@
                 android:src="@drawable/upload_location"
                 android:background="@null"
                 android:layout_weight="1.25"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"/>-->
 
             <TextView
                 android:layout_width="wrap_content"
@@ -96,7 +97,6 @@
                 android:textSize="18sp"
                 android:layout_marginTop="@dimen/standard_padding"
                 android:textColor="@color/colorLine"
-                android:gravity="right"
                 android:paddingRight="@dimen/standard_padding"/>
 
             <Button

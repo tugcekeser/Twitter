@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
 <android.support.design.widget.CoordinatorLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="com.codepath.apps.mysimpletweets.activities.FollowingActivity">
+    android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -19,14 +17,15 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="Following"/>
+            app:titleTextAppearance="@style/Toolbar.TitleText" />
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_following" />
+    <include layout="@layout/content_followers_following" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
@@ -34,4 +33,3 @@
         android:src="@drawable/compose" />
 
 </android.support.design.widget.CoordinatorLayout>
-</layout>

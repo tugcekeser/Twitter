@@ -46,7 +46,6 @@ public class SearchTweetActivity extends AppCompatActivity {
     private ArrayList<Tweet> results;
     private long maxId=1;
     private String query;
-    @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.lvTweets) ListView lvTweets;
     @BindView(R.id.scTweets) SwipeRefreshLayout scTweets;
 
@@ -55,19 +54,12 @@ public class SearchTweetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_tweet);
         ButterKnife.bind(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         query = getIntent().getStringExtra("q");
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO:
-            }
-        });
-
         client= TwitterApp.getRestClient();
 
         results=new ArrayList<Tweet>();

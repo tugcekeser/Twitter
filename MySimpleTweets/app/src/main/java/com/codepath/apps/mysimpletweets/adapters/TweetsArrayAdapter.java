@@ -3,15 +3,11 @@ package com.codepath.apps.mysimpletweets.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,19 +24,14 @@ import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.utils.Network;
 import com.codepath.apps.mysimpletweets.utils.PatternEditableBuilder;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import cz.msebera.android.httpclient.Header;
-import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 /**
  * Created by Tugce on 10/29/2016.
@@ -66,7 +57,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         tvUserName.setText(tweet.getUser().getName());
         tvBody.setText(tweet.getBody());
         new PatternEditableBuilder().
-                addPattern(Pattern.compile("\\@(\\w+)"), R.color.linkColor,
+                addPattern(Pattern.compile("\\@(\\w+)"), Color.parseColor("#4CB1F4"),
                         new PatternEditableBuilder.SpannableClickedListener() {
                             @Override
                             public void onSpanClicked(String text) {
